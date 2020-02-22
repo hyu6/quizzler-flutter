@@ -34,8 +34,6 @@ class QuizLib {
   void nextQuestion() {
     if (_questionIdx < _questionList.length - 1) {
       _questionIdx++;
-    } else {
-      _questionIdx = 0;
     }
   }
 
@@ -45,5 +43,13 @@ class QuizLib {
 
   bool getQuestionAns() {
     return _questionList[_questionIdx].questionAns;
+  }
+
+  bool isFinished() {
+    return _questionIdx >= _questionList.length - 1;
+  }
+
+  void reset() {
+    _questionIdx = 0;
   }
 }

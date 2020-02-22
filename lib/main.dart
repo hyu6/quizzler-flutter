@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizzler/quiz_lib.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 QuizLib quizLib = QuizLib();
 
@@ -33,24 +34,44 @@ class _QuizPageState extends State<QuizPage> {
   void checkAns(bool userAns) {
     bool correctAns = quizLib.getQuestionAns();
 
-    if (userAns == correctAns) {
-      scoreKeeper.add(
-        Icon(
-          Icons.check,
-          color: Colors.green,
-        ),
-      );
-    } else {
-      scoreKeeper.add(
-        Icon(
-          Icons.close,
-          color: Colors.red,
-        ),
-      );
-    }
-
     setState(() {
-      quizLib.nextQuestion();
+      if (quizLib.isFinished()) {
+        Alert(
+          context: context,
+          title: "Done!",
+          desc: "You\'ve finished the quiz.",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "OK",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 120,
+            )
+          ],
+        ).show();
+
+        quizLib.reset();
+        scoreKeeper = [];
+      } else {
+        if (userAns == correctAns) {
+          scoreKeeper.add(
+            Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+          );
+        } else {
+          scoreKeeper.add(
+            Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
+          );
+        }
+        quizLib.nextQuestion();
+      }
     });
   }
 
